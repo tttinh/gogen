@@ -6,8 +6,11 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/spf13/cobra"
+
+	"github.com/tinhtt/gogen/gendir"
 )
 
 // initCmd represents the init command
@@ -21,7 +24,12 @@ appropriate structure for a gRPC service (follow DDD, Clean Architect and CQRS c
 Gogen init must be run inside of a go module (please run "go mod init <MODNAME>" first)
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("init called")
+		projectPath, err := gendir.Generate()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Printf("Your application is ready at '%s'\n", projectPath)
 	},
 }
 
