@@ -5,12 +5,12 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
 	"log"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 
-	"github.com/tinhtt/gogen/gendir"
+	"github.com/tinhtt/gogen/fs"
 )
 
 // initCmd represents the init command
@@ -24,13 +24,35 @@ appropriate structure for a gRPC service (follow DDD, Clean Architect and CQRS c
 Gogen init must be run inside of a go module (please run "go mod init <MODNAME>" first)
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		projectPath, err := gendir.Generate()
-		if err != nil {
-			log.Fatal(err)
-		}
+		projectPath, err := generateProjectStructure()
+		errorExit(err)
 
-		fmt.Printf("Your application is ready at '%s'\n", projectPath)
+		getDependencies()
+
+		log.Println("Your application is ready at ", projectPath)
 	},
+}
+
+func errorExit(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func generateProjectStructure() (string, error) {
+	log.Println("Generating project structure...")
+	return fs.Generate()
+}
+
+func getDependencies() {
+	log.Println("Getting project dependencies...")
+	errorExit(goGet("github.com/spf13/cobra"))
+	errorExit(goGet("github.com/spf13/viper"))
+}
+
+func goGet(mod string) error {
+	log.Println("go get ", mod)
+	return exec.Command("go", "get", mod).Run()
 }
 
 func init() {

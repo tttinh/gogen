@@ -1,4 +1,4 @@
-package gendir
+package fs
 
 import (
 	"encoding/json"
@@ -8,6 +8,8 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+
+	"github.com/tinhtt/gogen/fs/project"
 )
 
 func Generate() (string, error) {
@@ -21,17 +23,17 @@ func Generate() (string, error) {
 		return "", err
 	}
 
-	project := &Project{
+	projectOpts := project.Options{
 		AbsolutePath:    workingDir,
 		PackageName:     moduleName,
 		ApplicationName: path.Base(moduleName),
 	}
 
-	if err := project.Create(); err != nil {
+	if err := project.Create(projectOpts); err != nil {
 		return "", err
 	}
 
-	return project.AbsolutePath, nil
+	return workingDir, nil
 }
 
 func getModuleImportPath() (string, error) {
