@@ -26,10 +26,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "{{ .ApplicationName }}",
 	Short: "A brief description of your application",
-	Long: ` + "`" + `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-XYZ is a service that do some magical things.` + "`" + `,
+	Long: ` + "`" + `{{ .ApplicationName }} is a gRPC service that do some magical things.` + "`" + `,
 	CompletionOptions: cobra.CompletionOptions{DisableDefaultCmd: true},
 }
 
