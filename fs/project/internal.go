@@ -7,10 +7,10 @@ import (
 func (b projectBuilder) createInternal() error {
 	// create sub folders
 	folders := [...]string{
-		"adapter",
+		"adapters",
 		"app",
 		"domain",
-		"port",
+		"ports",
 	}
 	for _, v := range folders {
 		if err := createDir(fmt.Sprintf("%s/internal/%s", b.AbsolutePath, v)); err != nil {

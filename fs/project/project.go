@@ -33,6 +33,7 @@ func (b projectBuilder) build() error {
 	folders := [...]string{
 		"api",
 		"cmd",
+		"docs",
 		"internal",
 	}
 	for _, v := range folders {
@@ -42,6 +43,10 @@ func (b projectBuilder) build() error {
 	}
 
 	if err := b.createMainFile(); err != nil {
+		return err
+	}
+
+	if err := b.createDocs(); err != nil {
 		return err
 	}
 
@@ -65,6 +70,22 @@ func (b projectBuilder) createMainFile() error {
 
 	mainTpl := template.Must(template.New("main").Parse(string(tpl.MainTemplate())))
 	err = mainTpl.Execute(mainFile, b)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (b projectBuilder) createDocs() error {
+	f, err := os.Create(fmt.Sprintf("%s/docs/ARCHITECTURE.md", b.AbsolutePath))
+
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	_, err = f.Write(tpl.ArchitectureTemplate())
 	if err != nil {
 		return err
 	}
