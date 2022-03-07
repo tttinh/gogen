@@ -24,21 +24,18 @@ type projectBuilder struct {
 }
 
 func (b projectBuilder) build() error {
-	baseFolders := [...]string{
-		"adapter",
-		"app",
-		"cmd",
-		"domain",
-		"port",
-	}
-
 	// root folder
 	if err := createDir(b.AbsolutePath); err != nil {
 		return err
 	}
 
 	// create sub folders
-	for _, v := range baseFolders {
+	folders := [...]string{
+		"api",
+		"cmd",
+		"internal",
+	}
+	for _, v := range folders {
 		if err := createDir(fmt.Sprintf("%s/%s", b.AbsolutePath, v)); err != nil {
 			return err
 		}
@@ -49,6 +46,10 @@ func (b projectBuilder) build() error {
 	}
 
 	if err := b.createCmd(); err != nil {
+		return err
+	}
+
+	if err := b.createInternal(); err != nil {
 		return err
 	}
 
