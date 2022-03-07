@@ -24,8 +24,24 @@ type projectBuilder struct {
 }
 
 func (b projectBuilder) build() error {
+	baseFolders := [...]string{
+		"adapter",
+		"app",
+		"cmd",
+		"domain",
+		"port",
+	}
+
+	// root folder
 	if err := createDir(b.AbsolutePath); err != nil {
 		return err
+	}
+
+	// create sub folders
+	for _, v := range baseFolders {
+		if err := createDir(fmt.Sprintf("%s/%s", b.AbsolutePath, v)); err != nil {
+			return err
+		}
 	}
 
 	if err := b.createMainFile(); err != nil {
